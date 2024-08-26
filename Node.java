@@ -27,8 +27,10 @@ public class Node {
     
 
     public String toString () {
-        return "ID: " + ID + " x: " + x + " y: " + y + " -> " + edgeList;
+        return "Node: (ID: " + ID + " x: " + x + " y: " + y + ")";
     }
+
+    
     
     
     

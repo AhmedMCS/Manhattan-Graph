@@ -1,22 +1,22 @@
 import java.util.ArrayList;
 
-public class Edge {
-    long targetID;
+public class Edge  {
+    Node target;
     double weight;
     ArrayList<Edge> edgeList;
 
-    public Edge (long targetID, double weight) {
-        this.targetID = targetID;
+    public Edge (Node target, double weight) {
+        this.target = target;
         this.weight = weight;
     }
 
     public Edge () {
-        this.targetID = 0;
+        this.target = null;
         this.weight = 0.0;
     }
 
     public String toString() {
-        return "targetID: " + targetID +", weight: " + weight;
+        return "(Edge: (" + "targetID:" + target.ID +", weight: " + weight + ")";
     }
 
 }

@@ -5,20 +5,39 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 public class AdjList {
-    Scanner nodesFile;
-    Scanner edgesFile;
-    public AdjList (Scanner nodesFile, Scanner edgesFile) {
-        this.nodesFile = nodesFile;
-        this.edgesFile = edgesFile;
+    public final int numOfIDs = 4507;
+    HashMap <Long, Node> IDmap = new HashMap<>();
+    Node Nodes [];
+    File file1 = new File("C:\\Users\\ahmed\\Documents\\Programming\\Personal Projects\\Project Manhattan\\manhattan_nodes.csv");
+    File file2 = new File("C:\\Users\\ahmed\\Documents\\Programming\\Personal Projects\\Project Manhattan\\manhattan_edges.csv");
+    HashMap <Node, ArrayList<Edge>> adjMap = new HashMap<>();
+
+    public AdjList(HashMap <Node, ArrayList<Edge>> adjList ) {
+        this.adjMap = adjMap;
+    }
+    public AdjList () {
+        adjMap = new HashMap<>();
     }
 
-    public void loadList() throws FileNotFoundException {
-        File file1 = new File("C:\\Users\\ahmed\\Documents\\Programming\\Personal Projects\\Project Manhattan\\manhattan_nodes.csv");
+    public void addNode (Node node) {
+        if (!adjMap.containsKey(node)) {
+            adjMap.put(node, new ArrayList<Edge>());
+        }
+
+    }
+
+    public void addEdge (Node sourceNode, Node targetNode, Double weight) {
+        addNode(targetNode);
+        addNode(sourceNode);
+        Edge edge = new Edge(targetNode, weight);
+        adjMap.get(sourceNode).add(edge);
+    }
+
+    
+    public void loadNodes() throws FileNotFoundException {
         Scanner nodesFile = new Scanner(file1);
         nodesFile.nextLine();
-        int numOfIDs = 4507;
-        Node Nodes [] = new Node [numOfIDs];
-        HashMap <Long, Node> mapID = new HashMap<>();
+        Nodes = new Node [numOfIDs];
         
         for (int i = 0; i < numOfIDs && nodesFile.hasNextLine(); i++) {
             String line = nodesFile.nextLine();
@@ -28,13 +47,19 @@ public class AdjList {
                     BigDecimal x = new BigDecimal(parts[1]);
                     BigDecimal y = new BigDecimal(parts[2]);
                     Nodes[i] = new Node(ID, x, y);
-                    mapID.put(ID, Nodes[i]);
+                    IDmap.put(ID, Nodes[i]);
+                    addNode(Nodes[i]);
                 }
         
         }
         nodesFile.close();
-    
-        File file2 = new File("C:\\Users\\ahmed\\Documents\\Programming\\Personal Projects\\Project Manhattan\\manhattan_edges.csv");
+
+      //  for (int i = 0; i < numOfIDs; i++) {
+     //       System.out.println(Nodes[i]);
+      //  }
+
+    }
+    public void loadEdges() throws FileNotFoundException {
         Scanner edgesFile = new Scanner(file2);
         edgesFile.nextLine();
         int numOfEdges = edgesFile.nextInt();
@@ -46,37 +71,36 @@ public class AdjList {
                 long sourceID = Long.parseLong(parts[0]);
                 long targetID = Long.parseLong(parts[1]);
                 double weight = Double.parseDouble(parts[2]);
-                Edge edge = new Edge(targetID, weight);
-                Node sourceNode = mapID.get(sourceID);
-                Node targetNode = mapID.get(targetID);
+                Node sourceNode = IDmap.get(sourceID);
+                Node targetNode = IDmap.get(targetID);
 
                 if (sourceNode != null && targetNode != null) {
-                    sourceNode.addEdge(edge);
+                    addEdge(sourceNode, targetNode, weight);
                 }
             }
+
             
         }
+
+     //   for (Node node : adjMap.keySet()) {
+       //     System.out.println(node + " -> " + adjMap.get(node));
+      //  }
         edgesFile.close();
-        for (int i = 0; i < numOfIDs; i++) {
-            System.out.println(Nodes[i].edgeList);
-        }
         
         
-    }
+        
+    
+}
 
     public static void main(String[] args) throws FileNotFoundException {
-        File file1 = new File("C:\\Users\\ahmed\\Documents\\Programming\\Personal Projects\\Project Manhattan\\manhattan_nodes.csv");
-        Scanner nodesFile = new Scanner(file1);
-        File file2 = new File("C:\\Users\\ahmed\\Documents\\Programming\\Personal Projects\\Project Manhattan\\manhattan_edges.csv");
-        Scanner edgesFile = new Scanner(file2);
-        AdjList AdjList = new AdjList(nodesFile, edgesFile);
-
-        AdjList.loadList();
-        
+        AdjList list = new AdjList();
+        list.loadNodes();
+        list.loadEdges();
     }
-    
-
 }
+
+
+    
         
        
 
