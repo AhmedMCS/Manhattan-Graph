@@ -6,17 +6,14 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 public class AdjList {
     public final int numOfIDs = 4507;
-    HashMap <Long, Node> IDmap = new HashMap<>();
-    Node Nodes [];
-    File file1 = new File("C:\\Users\\ahmed\\Documents\\Programming\\Personal Projects\\Project Manhattan\\manhattan_nodes.csv");
-    File file2 = new File("C:\\Users\\ahmed\\Documents\\Programming\\Personal Projects\\Project Manhattan\\manhattan_edges.csv");
+    private HashMap <Long, Node> IDmap = new HashMap<>();
+    private Node Nodes [];
+    private static final File NODES_FILE = new File("manhattan_nodes.csv");
+    private static final File EDGES_FILE = new File("manhattan_edges.csv");
     HashMap <Node, ArrayList<Edge>> adjMap = new HashMap<>();
 
-    public AdjList(HashMap <Node, ArrayList<Edge>> adjList ) {
-        this.adjMap = adjMap;
-    }
-    public AdjList () {
-        adjMap = new HashMap<>();
+    public AdjList() {
+        Nodes = new Node[numOfIDs];
     }
 
     public void addNode (Node node) {
@@ -33,9 +30,21 @@ public class AdjList {
         adjMap.get(sourceNode).add(edge);
     }
 
+    public Node getNode (int index) {
+        if (index > numOfIDs || index < 0) {
+            throw new IndexOutOfBoundsException("Invalid node index"); 
+        }
+        return Nodes[index];
+        
+    }
+
+    public ArrayList <Edge> getEdge (Node node) {
+        return adjMap.get(node);
+    }
+
     
     public void loadNodes() throws FileNotFoundException {
-        Scanner nodesFile = new Scanner(file1);
+        Scanner nodesFile = new Scanner(NODES_FILE);
         nodesFile.nextLine();
         Nodes = new Node [numOfIDs];
         
@@ -53,14 +62,9 @@ public class AdjList {
         
         }
         nodesFile.close();
-
-      //  for (int i = 0; i < numOfIDs; i++) {
-     //       System.out.println(Nodes[i]);
-      //  }
-
     }
     public void loadEdges() throws FileNotFoundException {
-        Scanner edgesFile = new Scanner(file2);
+        Scanner edgesFile = new Scanner(EDGES_FILE);
         edgesFile.nextLine();
         int numOfEdges = edgesFile.nextInt();
 
@@ -81,15 +85,9 @@ public class AdjList {
 
             
         }
-
-     //   for (Node node : adjMap.keySet()) {
-       //     System.out.println(node + " -> " + adjMap.get(node));
-      //  }
+        
         edgesFile.close();
         
-        
-        
-    
 }
 
     public static void main(String[] args) throws FileNotFoundException {
@@ -98,12 +96,3 @@ public class AdjList {
         list.loadEdges();
     }
 }
-
-
-    
-        
-       
-
-
-    
-
