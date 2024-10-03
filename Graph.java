@@ -1,10 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
-import java.util.HashSet;
 import java.util.PriorityQueue;
 public class Graph {
     AdjList adjList;
@@ -22,14 +19,10 @@ public class Graph {
         this.adjList.loadEdges();
     }
     
-    public ArrayList<Node> shortestPath (Node source, Node target) {
+    public void shortestPath (Node source, Node target) {
         HashMap <Node, Double> dist = new HashMap<>();
         HashMap <Node, Node> prev = new HashMap<>();
-        for (Node node : adjList.adjMap.keySet()) {
-            dist.put(node, Double.MAX_VALUE);
-            prev.put(node, null);
-        }
-        PriorityQueue <Node> pq = new PriorityQueue<>();
+        PriorityQueue<Node> pq = new PriorityQueue<>((n1, n2) -> Double.compare(dist.get(n1), dist.get(n2)));
         dist.put(source, 0.0);
         pq.add(source);
 
@@ -37,22 +30,59 @@ public class Graph {
             Node currentNode = pq.poll();
 
             if (currentNode.equals(target)) {
-                
+                break;
+            }
+
+            ArrayList<Edge> neighbors = adjList.adjMap.get(currentNode);
+
+            for (Edge edge : neighbors) {
+                Node neighbor = edge.target;
+                Double newDistance = dist.get(currentNode) + edge.weight;
+
+                if (!dist.containsKey(neighbor) || newDistance < dist.get(neighbor)) {
+                    dist.put(neighbor, newDistance);
+                    prev.put(neighbor, currentNode);
+                    pq.add(neighbor);
+                } 
+
+
             }
 
 
         }
 
+        printPath(source, target, prev, dist);
+    }
 
+    private void printPath(Node source, Node target, HashMap<Node, Node> prev, HashMap<Node, Double> dist) {
+        if (!dist.containsKey(target)) {
+            System.out.println("No path found");
+            return;
+        }
+    
+        ArrayList<Node> path = new ArrayList<>();
+        Node step = target;
+        
+        while (prev.containsKey(step)) {
+            path.add(0, step);  
+            step = prev.get(step);
+        }
+    
+        path.add(0, source);  
+        System.out.println("Shortest path: ");
+        for (Node node : path) {
+            System.out.print(node + " ");
+        }
+    
+        System.out.println("\nTotal distance: " + dist.get(target));
     }
     
 
     public static void main(String[] args) throws FileNotFoundException {
         Graph graph = new Graph();
-        Node node5 = graph.adjList.getNode(5);
-        ArrayList <Edge> node5Edge = graph.adjList.getEdge(node5);
-        System.out.println(node5);
-        System.out.println(node5Edge);
+        Node source = graph.adjList.getNode(5);
+        Node target = graph.adjList.getNode(2500);
+        graph.shortestPath(source, target);
 
 
         
