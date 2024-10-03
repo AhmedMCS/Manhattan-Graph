@@ -58,9 +58,13 @@ public class AdjList {
                     Nodes[i] = new Node(ID, x, y);
                     IDmap.put(ID, Nodes[i]);
                     addNode(Nodes[i]);
+                    System.out.println("Node: " + ID + " [x: " + x + ", y: " + y + "]");
                 }
+            
         
         }
+
+
         nodesFile.close();
     }
     public void loadEdges() throws FileNotFoundException {
@@ -81,10 +85,13 @@ public class AdjList {
                 if (sourceNode != null && targetNode != null) {
                     addEdge(sourceNode, targetNode, weight);
                 }
+
+                System.out.println("Edge: " + sourceID + " -> " + targetID + " [Weight: " + weight + "]");
             }
 
             
         }
+
         
         edgesFile.close();
         
