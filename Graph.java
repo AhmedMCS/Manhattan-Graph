@@ -74,7 +74,7 @@ public class Graph {
             System.out.print(node + " ");
         }
     
-        System.out.println("\nTotal distance: " + dist.get(target));
+        System.out.println("\nTotal Distance: " + dist.get(target));
     }
     
 
