@@ -27,7 +27,7 @@ public class Node {
     
 
     public String toString () {
-        return "Node: (ID: " + ID + " x: " + x + " y: " + y + ")";
+        return "Node: (ID: " + ID + " X: " + x + " Y: " + y + ")";
     }
 
     
