@@ -18,8 +18,8 @@ cleaned_nodes = nodes[['osmid', 'x', 'y']]
 cleaned_edges = edges[['u', 'v', 'length']]
 
 # Define file paths (update this to your path)
-nodes_file_path = 'C:\\Users\\ahmed\\Documents\\Programming\\Personal Projects\\Project Manhattan\\manhattan_nodes.csv'
-edges_file_path = 'C:\\Users\\ahmed\\Documents\\Programming\\Personal Projects\\Project Manhattan\\manhattan_edges.csv'
+nodes_file_path = 'manhattan_nodes.csv'
+edges_file_path = 'manhattan_edges.csv'
 
 # Save cleaned nodes and edges to CSV files
 cleaned_nodes.to_csv(nodes_file_path, index=False)
