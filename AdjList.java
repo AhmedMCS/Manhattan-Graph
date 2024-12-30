@@ -5,48 +5,47 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 public class AdjList {
-    public final int numOfIDs = 4507;
-    private HashMap <Long, Node> IDmap = new HashMap<>();
-    private Node Nodes [];
+    public final int numOfIDs = 4511;
     private static final File NODES_FILE = new File("manhattan_nodes.csv");
     private static final File EDGES_FILE = new File("manhattan_edges.csv");
     HashMap <Node, ArrayList<Edge>> adjMap = new HashMap<>();
+    private HashMap <Long, Node> nodeID = new HashMap<>();
+    private ArrayList<Node> nodeList = new ArrayList<>();
 
     public AdjList() {
-        Nodes = new Node[numOfIDs];
+
     }
 
-    public void addNode (Node node) {
+    public void addNode (Node node) {  // Adds node to map
         if (!adjMap.containsKey(node)) {
             adjMap.put(node, new ArrayList<Edge>());
+            nodeID.put(node.ID, node);
+            nodeList.add(node);
         }
 
     }
 
     public void addEdge (Node sourceNode, Node targetNode, Double weight) {
-        addNode(targetNode);
-        addNode(sourceNode);
+        addNode(targetNode); 
+        addNode(sourceNode); // Ensures nodes are in map before adding edge
         Edge edge = new Edge(targetNode, weight);
         adjMap.get(sourceNode).add(edge);
     }
-
-    public Node getNode (int index) {
-        if (index > numOfIDs || index < 0) {
-            throw new IndexOutOfBoundsException("Invalid node index"); 
+    
+    public Node getNode(int index) {
+        if (index < 0 || index > numOfIDs) {
+            System.out.println("Invalid Index");
         }
-        return Nodes[index];
-        
+        return nodeList.get(index);
     }
 
-    public ArrayList <Edge> getEdge (Node node) {
-        return adjMap.get(node);
-    }
+    
 
     
     public void loadNodes() throws FileNotFoundException {
         Scanner nodesFile = new Scanner(NODES_FILE);
         nodesFile.nextLine();
-        Nodes = new Node [numOfIDs];
+       // Nodes = new Node [numOfIDs];
         
         for (int i = 0; i < numOfIDs && nodesFile.hasNextLine(); i++) {
             String line = nodesFile.nextLine();
@@ -55,10 +54,9 @@ public class AdjList {
                     long ID = Long.parseLong(parts[0]);  
                     BigDecimal x = new BigDecimal(parts[1]);
                     BigDecimal y = new BigDecimal(parts[2]);
-                    Nodes[i] = new Node(ID, x, y);
-                    IDmap.put(ID, Nodes[i]);
-                    addNode(Nodes[i]);
-                    System.out.println("Node: " + ID + " [x: " + x + ", y: " + y + "]");
+                    Node node = new Node(ID, x, y);
+                    addNode(node);
+                  //  System.out.println("Node: " + ID + " [x: " + x + ", y: " + y + "]");
                 }
             
         
@@ -79,14 +77,15 @@ public class AdjList {
                 long sourceID = Long.parseLong(parts[0]);
                 long targetID = Long.parseLong(parts[1]);
                 double weight = Double.parseDouble(parts[2]);
-                Node sourceNode = IDmap.get(sourceID);
-                Node targetNode = IDmap.get(targetID);
+                Node sourceNode = nodeID.get(sourceID);
+                Node targetNode = nodeID.get(targetID);
+                
 
                 if (sourceNode != null && targetNode != null) {
                     addEdge(sourceNode, targetNode, weight);
                 }
 
-                System.out.println("Edge: " + sourceID + " -> " + targetID + " [Weight: " + weight + "]");
+              // System.out.println("Edge: " + sourceID + " -> " + targetID + " [Weight: " + weight + "]");
             }
 
             
@@ -101,5 +100,7 @@ public class AdjList {
         AdjList list = new AdjList();
         list.loadNodes();
         list.loadEdges();
+        Node node = list.getNode(0);
+        System.out.println(list.adjMap.get(node));
     }
 }
