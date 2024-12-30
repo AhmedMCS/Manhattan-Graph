@@ -1,9 +1,6 @@
-import java.util.ArrayList;
-
 public class Edge  {
     Node target;
     double weight;
-    ArrayList<Edge> edgeList;
 
     public Edge (Node target, double weight) {
         this.target = target;
