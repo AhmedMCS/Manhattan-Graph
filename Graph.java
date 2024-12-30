@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.PriorityQueue;
 public class Graph {
     AdjList adjList;
-    private static final int numOfIDs = 4507;
-    private static final File NODES_FILE = new File("manhattan_nodes.csv");
-    private static final File EDGES_FILE = new File("manhattan_edges.csv");
     
     public Graph (AdjList adjList) {
         this.adjList = adjList;
@@ -78,12 +75,7 @@ public class Graph {
     }
     
 
-    public static void main(String[] args) throws FileNotFoundException {
-        Graph graph = new Graph();
-        Node source = graph.adjList.getNode(5);
-        Node target = graph.adjList.getNode(2500);
-        graph.shortestPath(source, target);
-
+    public static void main(String[] args) {
 
         
     }
